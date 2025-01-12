@@ -1,5 +1,6 @@
 from __future__ import annotations
-from llm import generate_program, llm_parse_injury
+from .llm import generate_program, llm_parse_injury
+from .pose_estimation.estimation import getCorrectness
 
 import cv2
 
@@ -13,24 +14,8 @@ def create_plan(exercises: list[str], duration: str) -> str:
     return generate_program(exercises, duration)
 
 def generate_feedback(img: cv2.typing.MatLike) -> str | None:
-    global counter
-    counter += 1
-    if counter % 200 == 0:
-        return "Bad posture"
-    elif counter % 100 == 0:
-        return "Good posture"
-    else:
-        return None
-
-def generate_feedback(img: cv2.typing.MatLike) -> str | None:
-    global counter
-    counter += 1
-    if counter % 200 == 0:
-        return "Bad posture"
-    elif counter % 100 == 0:
-        return "Good posture"
-    else:
-        return None
+    return getCorrectness(img, "Overhead-Arm-Hold")
+    # print(pose_data)
 
 def parse_injury(text: str) -> str:
     return llm_parse_injury(text)

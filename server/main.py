@@ -48,9 +48,8 @@ async def websocket_endpoint(websocket: WebSocket):
             img = base64_to_image(data)
             # cv2.imshow("Webcam Feed", img)
             # cv2.waitKey(1)
-            feedback = generate_feedback(img)
-            if feedback is not None:
-                await websocket.send_text(feedback)
+            feedback, coords = generate_feedback(img)
+            await websocket.send_json(dict(feedback=feedback, coords=coords))
 
     except Exception as e:
         print(f"WebSocket connection closed: {e}")

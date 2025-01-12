@@ -6,6 +6,7 @@ export default function Feed() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
   const [socket, setSocket] = useState<WebSocket | null>(null);
+  const [points, setPoints] = useState<[number, number][]>([]);
 
   const startWebcam = async () => {
     try {
@@ -37,15 +38,18 @@ export default function Feed() {
     ws.onclose = () => console.log("WebSocket connection closed");
     ws.onerror = (error) => console.error("WebSocket error", error);
     ws.onmessage = (event) => {
-      const playMessage = async () => {
-        console.log("Playing message", { message: event.data });
-        const utterance = new SpeechSynthesisUtterance(event.data);
+      const playMessage = async (message: string) => {
+        console.log("Playing message", { message });
+        const utterance = new SpeechSynthesisUtterance(message);
         utterance.lang = "en-US";
         const voice = speechSynthesis.getVoices().find((voice) => voice.name === "Google US English");
         if (voice) utterance.voice = voice;
         speechSynthesis.speak(utterance);
       }
-      playMessage();
+      // playMessage();
+      const data = JSON.parse(event.data);
+      if (data.feedback !== null) playMessage(data.feedback);
+      setPoints(data.coords);
     }
     setSocket(ws);
 
@@ -81,7 +85,7 @@ export default function Feed() {
   return (
     <div className="h-dvh w-full bg-snow flex items-center justify-center">
       <div className="flex flex-col gap-2 items-center">
-        <div className="h-[550px] aspect-[4/3]">
+        <div className="h-[550px] aspect-[4/3] relative">
           <video
             ref={videoRef}
             autoPlay
@@ -89,6 +93,16 @@ export default function Feed() {
             className="border-4 border-neutral-400 rounded-3xl aspect-[4/3] bg-black"
             style={{ width: "100%" }}
           />
+          {points.map((point, i) => {
+            // console.log(`${(480 - point[1]) * 550}px`, `${(640 - point[0]) * (550 * 4/3)}px`)
+            return (
+              <div 
+                key={i}
+                className="w-6 h-6 rounded-full bg-pink-600 opacity-60 absolute"
+                style={{ top: `${(point[1] / 480) * 550}px`, left: `${(point[0] / 640) * (550 * 4/3)}px` }}
+              />
+            )
+          })}
           <canvas ref={canvasRef} className="hidden" />
         </div>
         <div className="flex gap-x-2">

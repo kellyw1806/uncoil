@@ -1,4 +1,5 @@
 import cv2
+import time
 import numpy as np
 from ultralytics import YOLO
 
@@ -24,6 +25,12 @@ LEFT_ARM = "LEFT_ARM"
 RIGHT_ARM = "RIGHT_ARM"
 ARM = "ARM"
 LEG = "LEG"
+
+model = YOLO("models/yolo11l-pose.pt")
+
+history = []
+word_dict = {"Please fix your posture!" : int(time.time()),
+             "Your posture is correct!" : int(time.time())}
 
 # Dictionary to store correct pose angles for each exercise
 exercise_angles = {
@@ -204,7 +211,6 @@ def calculate_angle(a, b, c):
 
 def check_pose(landmarks, exercise_name):
     correct_angles = exercise_angles[exercise_name]
-    correct_angles = exercise_angles[exercise]
     correctness_dict = {}
     for angle_set in correct_angles:
         correct = 0
@@ -222,42 +228,57 @@ def check_pose(landmarks, exercise_name):
     return correctness_dict
 
 
-model = YOLO("models/yolo11l-pose.pt")
-# image_path = "Exercises/Butterfly.jpg"
-# video_path = "videos/steven_wu_quads.mov"
+def getCorrectness(image, exercise_name):
+    # image_path = "Exercises/Butterfly.jpg"
+    # video_path = "videos/steven_wu_quads.mov"
 
-exercise = "Overhead-Arm-Hold"
+    # image = cv2.imread(image_path)
+    results = model.predict(source=image, stream=True, verbose=False, conf=0.6)
+    # results = model.predict(video_path, stream=True, verbose=False, conf=0.5)
+    # results = model(source=0, stream=True, verbose=False, conf=0.5)
 
-# image = cv2.imread(image_path)
+    for result in results:
+        
+        pose_data = result.keypoints.cpu().numpy().xy[0]
+        # print(result.keypoints.cpu().numpy().conf)
+        correctness = check_pose(pose_data, exercise_name)
+        feedback = None
+        is_correct = 1
+        wrong_body = ''
+        for body_part, correct in correctness.items():
+            if correct == 0:
+                is_correct = 0
+                wrong_body = body_part
+                break;
+        
+        history.append(is_correct)
+        if len(history) > 10: 
+            history.pop(0)
+            hist_sum = 0
+            for i in history: hist_sum += i
+            cur_time = int(time.time())
+            if hist_sum <= 2 and cur_time - word_dict["Please fix your posture!"] > 15:
+                feedback = "Please fix your " + wrong_body + " posture!"
+                word_dict["Please fix your posture!"] = cur_time 
+            elif hist_sum >= 8 and cur_time - word_dict["Your posture is correct!"] > 15:
+                feedback = "Your posture is correct!"
+                word_dict["Your posture is correct!"] = cur_time
+            
+        # print("Correctness:", correctness)
 
-# results = model.predict(video_path, stream=True, verbose=False, conf=0.5)
-results = model(source=0, stream=True, verbose=False, conf=0.5)
+        # Annotate the image with landmarks and angles
+        # annotated_image = result.plot()
+        # cv2.imshow("Annotated Image", annotated_image)
+        # cv2.waitKey(1)
+        res = []
+        for d in pose_data[5:]:
+            if d[0] + d[1] == 0:
+                continue
+            res.append([float(d[0]), float(d[1])])
+        return feedback, res
 
-for result in results:
-    pose_data = result.keypoints.cpu().numpy().xy[0]
+    #     if cv2.waitKey(1) & 0xFF == ord("q"):
+    #         break
 
-    correctness = check_pose(pose_data, exercise)
-    is_correct = True
-    for body_part, correct in correctness.items():
-        if correct == 0:
-            is_correct = False
-            break;
-    
-    if is_correct:
-        print("The movement is correct!")
-    # print("Correctness:", correctness)
-
-    # Annotate the image with landmarks and angles
-    annotated_image = result.plot()
-    # cv2.putText(annotated_image, f"Left Leg Angle: {left_leg_angle:.2f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-    # cv2.putText(annotated_image, f"Right Leg Angle: {right_leg_angle:.2f}", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-    # cv2.putText(annotated_image, f"Back Angle: {back_angle:.2f}", (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-    # cv2.putText(annotated_image, f"Left Arm Angle: {left_arm_angle:.2f}", (10, 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-    # cv2.putText(annotated_image, f"Right Arm Angle: {right_arm_angle:.2f}", (10, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-    cv2.imshow("Annotated Image", annotated_image)
-
-    if cv2.waitKey(1) & 0xFF == ord("q"):
-        break
-
-cv2.destroyAllWindows()
+    # cv2.destroyAllWindows()
 
