@@ -1,38 +1,33 @@
+import Coil from "../components/Coil";
+
 export default function Landing() {
   return (
-    <div className="h-dvh w-full bg-beige flex">
-      <div className="h-full w-[600px] ml-40 relative">
-        <img src="./landing.png" className="h-full object-cover" />
-        <div className="absolute left-8 top-8 text-4xl">
-          <h2 className="font-lusitana">stretch.</h2>
-          <h2 className="font-lusitana">correct.</h2>
-          <h2 className="font-lusitana">relief.</h2>
-        </div>
-      </div>
-      <div className="flex-1 flex flex-col items-center justify-center gap-y-8">
-        <div>
-          <div className="flex">
-            <h1 className="text-7xl text-center font-lusitana">uncoil</h1>
-            <img src="./coil.svg" className="scale-75 mb-2" />
-          </div>
-          <h2 className="text-center text-2xl font-cedarville">
-            the future of physiotherapy
-          </h2>
-        </div>
-
-        <div className="flex flex-col items-center gap-y-4">
-          <div className="bg-latte h-56 aspect-square rounded-full border-[12px] border-wood flex items-center justify-center">
-            <div className="text-3xl m-4 font-serif ml-[1.75rem] text-beige">
-              heal in the comfort of your home
+    <div className="h-dvh w-full flex relative">
+      <img src="./landing/background.jpg" className="h-full w-full object-cover" />
+      <div className="absolute top-0 right-0 h-full w-1/3 bg-[#000000A0] flex flex-col items-center justify-center">
+        <div className="flex flex-col gap-y-6">
+          <div className="mx-8">
+            <div className="flex">
+              <h1 className="text-pinenut text-6xl font-lusitana-bold">uncoil</h1>
+              <div className="w-1 h-full relative">
+                <Coil className="absolute left-[-8px] top-3 w-28 stroke-pinenut" />
+              </div>
             </div>
+            <h2 className="text-pinenut text-2xl font-lusitana-bold">the future of physiotherapy</h2>
           </div>
-          <div className="bg-wood h-12 aspect-square rounded-full" />
-          <div className="bg-wood h-8 aspect-square rounded-full" />
+          <div className="w-full aspect-square relative flex flex-col items-center justify-center text-4xl font-lusitana">
+            <div className="absolute top-0 left-0 bg-pinenut w-[85%] aspect-square rounded-full opacity-70" />
+            <div className="absolute bottom-0 right-0 bg-sawdust w-[85%] aspect-square rounded-full opacity-70" />
+            <p className="z-20">stretch.</p>
+            <p className="z-20">correct.</p>
+            <p className="z-20">relief.</p>
+          </div>
+          <div className="flex justify-center">
+            <button className="bg-pinenut70 w-auto px-12 py-4 rounded-2xl text-xl font-lusitana text-beige hover:bg-pinenut transition-colors">
+              Begin your journey!
+            </button>
+          </div>
         </div>
-
-        <button className="bg-ocean text-beige text-2xl font-lusitana py-2 px-4 rounded-xl shadow-lg hover:bg-[#295f7d] transition-colors">
-          begin your journey
-        </button>
       </div>
     </div>
   )

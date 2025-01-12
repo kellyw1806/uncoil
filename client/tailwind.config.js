@@ -8,19 +8,16 @@ export default {
     extend: {
       fontFamily: {
         "lusitana": ["Lusitana", "serif"],
+        "lusitana-bold": ["Lusitana Bold", "serif"],
         "cedarville": ["CedarvilleCursive", "cursive"],
         "inknut": ["InknutAntiqua"],
       },
       colors: {
-        "beige": "#f0ddb8",
-        "latte": "#c78b49",
-        "wood": "#e6ab5c",
-        "ocean": "#1d4257",
-        "sawdust": "#dfbc9c",
-        "oak": "#aa733c",
-        "spruce": "#96673a",
-        "pinenut": "#86938e",
         "darkoak": "#44443C",
+        "beige": "#DADAC2",
+        "sawdust": "#dfbc9c",
+        "pinenut": "#86938e",
+        "pinenut70": "#86938eb4",
       }
     },
   },

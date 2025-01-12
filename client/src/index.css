@@ -9,7 +9,12 @@
 
 @font-face {
   font-family: "Lusitana";
-  src: local("Lusitana"), url(./fonts/Lusitana-Bold.ttf) format("truetype");
+  src: local("Lusitana"), url(./fonts/Lusitana-Regular.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Lusitana Bold";
+  src: local("Lusitana Bold"), url(./fonts/Lusitana-Bold.ttf) format("truetype");
 }
 
 @font-face {
