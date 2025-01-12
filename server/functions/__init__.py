@@ -15,8 +15,8 @@ def create_exercises(data: dict) -> list[str]:
 def create_plan(exercises: list[str], duration: str) -> str:
     return generate_program(exercises, duration)
 
-def generate_feedback(img: cv2.typing.MatLike) -> str | None:
-    return getCorrectness(img, "Overhead-Arm-Hold")
+def generate_feedback(img: cv2.typing.MatLike, pose: str) -> str | None:
+    return getCorrectness(img, pose)
     # print(pose_data)
 
 def parse_responses(responses: dict) -> dict:

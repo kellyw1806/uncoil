@@ -26,7 +26,7 @@ RIGHT_ARM = "RIGHT_ARM"
 ARM = "ARM"
 LEG = "LEG"
 
-model = YOLO("models/yolo11l-pose.pt")
+model = YOLO("models/yolo11m-pose.pt")
 
 history = []
 word_dict = {"Please fix your posture!" : int(time.time()),
@@ -34,13 +34,13 @@ word_dict = {"Please fix your posture!" : int(time.time()),
 
 # Dictionary to store correct pose angles for each exercise
 exercise_angles = {
-    "Bird-Dog-Left": [
+    "bird dog left": [
         [BACK, [[[LEFT_SHOULDER, LEFT_HIP, LEFT_ANKLE], 170, 190]]]
     ],
-    "Bird-Dog-Right": [
+    "bird dog right": [
         [BACK, [[[RIGHT_SHOULDER, RIGHT_HIP, RIGHT_ANKLE], 170, 190]]]
     ],
-    "Bridge-Pose-Hold": [
+    "bridge pose hold": [
         [
             BACK,
             [
@@ -49,7 +49,7 @@ exercise_angles = {
             ]
         ]
     ],
-    "Butterfly-Stretch": [
+    "butterfly stretch": [
         [
             BACK,
             [
@@ -58,17 +58,17 @@ exercise_angles = {
             ]
         ]
     ],
-    "Calf-Stretch-Left": [
+    "calf stretch left": [
         [BACK, [[[LEFT_SHOULDER, LEFT_HIP, LEFT_KNEE], 75, 115]]],
         [LEFT_LEG, [[[LEFT_HIP, LEFT_KNEE, LEFT_ANKLE], 100, 120]]],
         [RIGHT_LEG, [[[RIGHT_HIP, RIGHT_KNEE, RIGHT_ANKLE], 170, 190]]]
     ],
-    "Calf-Stretch-Right": [
+    "calf stretch right": [
         [BACK, [[[RIGHT_SHOULDER, RIGHT_HIP, RIGHT_KNEE], 75, 115]]],
         [RIGHT_LEG, [[[RIGHT_HIP, RIGHT_KNEE, RIGHT_ANKLE], 100, 120]]],
         [LEFT_LEG, [[[LEFT_HIP, LEFT_KNEE, LEFT_ANKLE], 170, 190]]]
     ],
-    "Chair-Pose": [
+    "chair pose": [
         [
             BACK,
             [
@@ -77,7 +77,7 @@ exercise_angles = {
             ]
         ]
     ],
-    "Dead-Bug-Hold": [
+    "dead bug hold": [
         [
             LEG,
             [
@@ -93,17 +93,17 @@ exercise_angles = {
             ]
         ],
     ],
-    "Half-Kneeling-Hip-Flexor-Stretch-Left": [
+    "half kneeling hip flexor stretch left": [
         [BACK, [[[LEFT_SHOULDER, LEFT_HIP, LEFT_KNEE], 80, 100]]],
         [LEFT_LEG, [[[LEFT_HIP, LEFT_KNEE, LEFT_ANKLE], 80, 100]]],
         [RIGHT_LEG, [[[RIGHT_HIP, RIGHT_KNEE, RIGHT_ANKLE], 80, 100]]]
     ],
-    "Half-Kneeling-Hip-Flexor-Stretch-Right": [
+    "half kneeling hip flexor stretch right": [
         [BACK, [[RIGHT_SHOULDER, RIGHT_HIP, RIGHT_KNEE], 80, 100]],
         [RIGHT_LEG, [[RIGHT_HIP, RIGHT_KNEE, RIGHT_ANKLE], 80, 100]],
         [LEFT_LEG, [[LEFT_HIP, LEFT_KNEE, LEFT_ANKLE], 80, 100]]
     ],
-    "Hollow-Body-Hold": [
+    "hollow body hold": [
         [
             BACK,
             [
@@ -112,7 +112,7 @@ exercise_angles = {
             ]
         ]
     ],
-    "Overhead-Arm-Hold": [
+    "overhead arm hold": [
         [
             BACK,
             [
@@ -121,7 +121,7 @@ exercise_angles = {
             ]
         ]
     ],
-    "Plank": [
+    "plank": [
         [
             BACK,
             [
@@ -130,7 +130,7 @@ exercise_angles = {
             ]
         ]
     ],
-    "Reverse-Tabletop-Pose": [
+    "reverse tabletop pose": [
         [
             LEG,
             [
@@ -146,13 +146,13 @@ exercise_angles = {
             ]
         ]
     ],
-    "Side-Plank-Left": [
+    "side plank left": [
         [BACK, [[[LEFT_SHOULDER, LEFT_HIP, LEFT_ANKLE], 170, 190]]]
     ],
-    "Side-Plank-Right": [
+    "side plank tight": [
         [BACK, [[[RIGHT_SHOULDER, RIGHT_HIP, RIGHT_ANKLE], 170, 190]]]
     ],
-    "Standing-Calf-Raise": [
+    "standing calf raise": [
         [
             BACK,
             [
@@ -161,7 +161,7 @@ exercise_angles = {
             ]
         ]
     ],
-    "Standing-Quad-Stretch-Left": [
+    "standing quad stretch left": [
         [LEFT_LEG, [[[LEFT_HIP, LEFT_KNEE, LEFT_ANKLE], 0, 45]]],
         [RIGHT_LEG, [[[RIGHT_HIP, RIGHT_KNEE, RIGHT_ANKLE], 170, 190]]],
         [
@@ -172,7 +172,7 @@ exercise_angles = {
             ]
         ]
     ],
-    "Standing-Quad-Stretch-Right": [
+    "standing quad stretch right": [
         [RIGHT_LEG, [[[RIGHT_HIP, RIGHT_KNEE, RIGHT_ANKLE], 0, 45]]],
         [LEFT_LEG, [[[LEFT_HIP, LEFT_KNEE, LEFT_ANKLE], 170, 190]]],
         [
@@ -183,10 +183,10 @@ exercise_angles = {
             ]
         ]
     ],
-    "Straight-Leg-Left": [
+    "straight leg left": [
         [LEFT_LEG, [[[LEFT_SHOULDER, LEFT_HIP, LEFT_ANKLE], 105, 150]]]
     ],
-    "Straight-Leg-Right": [
+    "straight leg right": [
         [RIGHT_LEG, [[[RIGHT_SHOULDER, RIGHT_HIP, RIGHT_ANKLE], 105, 150]]]
     ]
 }
@@ -257,10 +257,10 @@ def getCorrectness(image, exercise_name):
             hist_sum = 0
             for i in history: hist_sum += i
             cur_time = int(time.time())
-            if hist_sum <= 2 and cur_time - word_dict["Please fix your posture!"] > 15:
+            if hist_sum <= 2 and cur_time - word_dict["Please fix your posture!"] > 5:
                 feedback = "Please fix your " + wrong_body + " posture!"
                 word_dict["Please fix your posture!"] = cur_time 
-            elif hist_sum >= 8 and cur_time - word_dict["Your posture is correct!"] > 15:
+            elif hist_sum >= 8 and cur_time - word_dict["Your posture is correct!"] > 5:
                 feedback = "Your posture is correct!"
                 word_dict["Your posture is correct!"] = cur_time
             

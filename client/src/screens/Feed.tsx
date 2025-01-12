@@ -1,5 +1,7 @@
+import { useStore } from "@nanostores/react";
 import { useEffect, useRef, useState } from "react"
 import { FaPlay, FaStop } from "react-icons/fa6";
+import { $exercises, $plan, $pose_info } from "../stores/global";
 
 export default function Feed() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -7,6 +9,14 @@ export default function Feed() {
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [points, setPoints] = useState<[number, number][]>([]);
+  const [timer, setTimer] = useState(20);
+  const [curr, setCurr] = useState(0);
+  const plan = useStore($plan);
+  
+  const exerciseName = plan.exercise_program[curr].exercise;
+  const info = $pose_info.get()[exerciseName.toLowerCase()]
+  // console.log(exerciseName.toLowerCase())
+  // convert to first letter capital
 
   const startWebcam = async () => {
     try {
@@ -30,7 +40,24 @@ export default function Feed() {
       });
       setMediaStream(null);
     }
+    setPoints([])
   };
+
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      if (timer <= 0) {
+        setTimer(10);
+        if (curr === plan.exercise_program.length - 1) {
+          setCurr(0);
+        } else {
+          setCurr(curr + 1)
+        }
+      } else {
+        setTimer(timer - 1)
+      }
+    }, 1000)
+    return () => clearInterval(countdown)
+  }, [timer, curr])
 
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8000/ws/feed");
@@ -77,13 +104,13 @@ export default function Feed() {
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
       const data = canvas.toDataURL("image/jpeg");
-      socket.send(data);
+      socket.send(JSON.stringify({ data, pose: exerciseName.toLowerCase() }));
     }, 1000 / 10);
     return () => clearInterval(interval);
-  }, [mediaStream, socket])
+  }, [mediaStream, socket, exerciseName])
 
   return (
-    <div className="h-dvh w-full bg-snow flex items-center justify-center">
+    <div className="h-dvh w-full bg-snow flex items-center justify-center relative">
       <div className="flex flex-col gap-2 items-center">
         <div className="h-[550px] aspect-[4/3] relative">
           <video
@@ -119,6 +146,14 @@ export default function Feed() {
             <FaStop className="text-snow" />
           </button>
         </div>
+      </div>
+      <div className="absolute top-8 left-8">
+        <div className="h-32 aspect-square bg-darkoak rounded-full flex items-center justify-center text-beige font-lusitana text-4xl">
+          {timer}
+        </div>
+        <h1>{plan.exercise_program[curr].exercise}</h1>
+        <p className="max-w-64">{info.instructions}</p>
+        <img src={`./poses/${info.image}`} className="w-64" />
       </div>
     </div>
   )

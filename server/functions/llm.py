@@ -30,7 +30,7 @@ def generate_program(exercises, duration):
         f"Create an optimal exercise program using the following exercises: {exercise_list}. "
         f"The program should fit into a {duration}-minute time frame. Choose from the list for one to be cool down and one to be the warm up. "
         "Specify the duration of each exercise. Be more succinct so that it is easy to understand."
-        "Return the response in JSON format where every entry should include the exercise name as a string, duration (minutes) as a string, and type ('warm up', 'main' or 'cool down'). There should be no new lines in the json whatsoever. "
+        "Return the response in JSON format where every entry should include the exercise name as a string, duration (minutes) as a string, and type ('warm up', 'main' or 'cool down'). There should be no new lines in the json whatsoever. Do not change the casing of the exercise name."
     
     )
 

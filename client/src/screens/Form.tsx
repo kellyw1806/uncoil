@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { $exercises, $plan } from "../stores/global";
+import { $exercises, $plan, $screen } from "../stores/global";
 
 export default function Form() {
   const [step, setStep] = useState(0);
@@ -74,6 +74,7 @@ export default function Form() {
         const result = await response.json()
         $exercises.set(result.exercises)
         $plan.set(JSON.parse(result.plan))
+        $screen.set("debrief")
         console.log(result)
   
       } catch (error) {
