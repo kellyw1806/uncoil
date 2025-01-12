@@ -41,6 +41,20 @@ export default function Feed() {
     ws.onerror = (error) => {
       console.error("WebSocket error", error);
     };
+    ws.onmessage = (event) => {
+      const playMessage = async () => {
+        const utterance = new SpeechSynthesisUtterance(event.data);
+        utterance.lang = "en-US";
+        // voice is Google US English
+        const voice = speechSynthesis.getVoices().find((voice) => voice.name === "Google US English");
+        if (voice) {
+          utterance.voice = voice;
+        }
+        speechSynthesis.speak(utterance);
+      }
+      playMessage();
+      console.log("WebSocket message", event.data);
+    }
     setSocket(ws);
 
     return () => {
@@ -70,12 +84,12 @@ export default function Feed() {
       const data = canvas.toDataURL("image/jpeg");
       socket.send(data);
       console.log("send data")
-    }, 1000 / 15);
+    }, 1000 / 10);
     return () => clearInterval(interval);
   }, [mediaStream, socket])
 
   return (
-    <div>
+    <div className="w-full">
       <canvas ref={canvasRef} className="hidden" />
       <div>
         <video

@@ -7,7 +7,7 @@ import base64
 import numpy as np
 from pprint import pprint
 
-from functions import create_exercises, create_plan, parse_injury
+from functions import create_exercises, create_plan, generate_feedback, parse_injury
 
 app = FastAPI()
 
@@ -40,15 +40,21 @@ def base64_to_image(base64_str):
 
 @app.websocket("/ws/feed")
 async def websocket_endpoint(websocket: WebSocket):
+    global counter
     await websocket.accept()
     try:
         while True:
             data = await websocket.receive_text()
             img = base64_to_image(data)
-            cv2.imshow("Webcam Feed", img)
-            cv2.waitKey(1)
+            # cv2.imshow("Webcam Feed", img)
+            # cv2.waitKey(1)
+            feedback = generate_feedback(img)
+            if feedback is not None:
+                await websocket.send_text(feedback)
+
     except Exception as e:
         print(f"WebSocket connection closed: {e}")
+        
     finally:
         await websocket.close()
         cv2.destroyAllWindows()
