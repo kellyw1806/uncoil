@@ -78,20 +78,10 @@ export default function Form() {
       <div className="font-inknut absolute text-darkoak text-center" style={{"top": "38%", "right": "11.5%", "fontSize": "2rem"}}>
         help us get to know you better
       </div>
-      <div className="w-full max-w-xl p-8 shadow-lg rounded-lg h-96 absolute bg-pinenut border-darkoak border-8" style={{"top": "45%", "right": "10%"}}>
-        {/* <div className="flex mb-4">
-          {questions.map((_, index) => (
-            <div
-              key={index}
-              className={`flex-1 h-2 mx-1 ${
-                index <= step ? "bg-blue-500" : "bg-gray-300"
-              } transition-all duration-300`}
-            ></div>
-          ))}
-        </div> */}
+      <div className="w-full max-w-xl p-8 shadow-lg rounded-lg h-96 absolute bg-pinenut border-darkoak border-8" style={{"top": "35%", "right": "10%"}}>
 
-        <div className="transition-all py-16 justify-center items-center flex flex-col">
-          <h2 className="text-3xl mb-4 font-inknut text-sawdust">
+        <div className="transition-all py-8 px-4 justify-center items-center flex flex-col mt-auto">
+          <h2 className="text-3xl mb-4 font-inknut text-sawdust text-center">
             {questions[step].label}
           </h2> 
             <input
@@ -105,7 +95,7 @@ export default function Form() {
           
         </div>
 
-        <div className="flex justify-between mt-6">
+        <div className="flex justify-between">
           {step > 0 && (
             <button
               onClick={prevStep}
