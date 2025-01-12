@@ -5,7 +5,6 @@ import './index.css'
 import App from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
     <ConfigProvider
       theme={{
         token: {
@@ -17,6 +16,5 @@ createRoot(document.getElementById('root')!).render(
     >
 
       <App />
-    </ConfigProvider>
-  </StrictMode>,
+    </ConfigProvider>,
 )

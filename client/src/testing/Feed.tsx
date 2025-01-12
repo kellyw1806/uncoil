@@ -5,6 +5,7 @@ export default function Feed() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
+  const [socket, setSocket] = useState<WebSocket | null>(null);
 
   const startWebcam = async () => {
     try {
@@ -22,6 +23,7 @@ export default function Feed() {
   const stopWebcam = async () => {
     if (mediaStream) {
       mediaStream.getTracks().forEach((track) => {
+        console.log("Stopping tracker", { track })
         track.stop();
       });
       setMediaStream(null);
@@ -29,7 +31,27 @@ export default function Feed() {
   };
 
   useEffect(() => {
+    const ws = new WebSocket("ws://localhost:8000/ws/feed");
+    ws.onopen = () => {
+      console.log("WebSocket connection opened");
+    };
+    ws.onclose = () => {
+      console.log("WebSocket connection closed");
+    };
+    ws.onerror = (error) => {
+      console.error("WebSocket error", error);
+    };
+    setSocket(ws);
+
+    return () => {
+      ws.close();
+    };
+  }, []);
+
+  useEffect(() => {
     const interval = setInterval(() => {
+      if (!socket) return;
+      if (socket.readyState !== WebSocket.OPEN) return;
       if (!mediaStream) return;
       if (!canvasRef.current) return;
       if (!videoRef.current) return;
@@ -46,9 +68,11 @@ export default function Feed() {
       canvas.height = video.videoHeight;
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
       const data = canvas.toDataURL("image/jpeg");
-    }, 1000 / 30);
+      socket.send(data);
+      console.log("send data")
+    }, 1000 / 15);
     return () => clearInterval(interval);
-  }, [mediaStream])
+  }, [mediaStream, socket])
 
   return (
     <div>
