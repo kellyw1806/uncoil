@@ -13,7 +13,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -25,6 +25,7 @@ def read_root():
 
 @app.post("/plan")
 async def plan_post(request: Request):
+    print("Request plan")
     details = await request.json()
     details = parse_responses(details)
     exercises = create_exercises(details)
@@ -44,11 +45,12 @@ async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     try:
         while True:
-            data = await websocket.receive_text()
-            img = base64_to_image(data)
+            data = await websocket.receive_json()
+            img = base64_to_image(data["data"])
+            # print(data["pose"])
             # cv2.imshow("Webcam Feed", img)
             # cv2.waitKey(1)
-            feedback, coords = generate_feedback(img)
+            feedback, coords = generate_feedback(img, data["pose"])
             await websocket.send_json(dict(feedback=feedback, coords=coords))
 
     except Exception as e:
