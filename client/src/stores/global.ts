@@ -18,11 +18,11 @@ export const $pose_info = atom({
         image: "chair_pose.png",
         instructions: "Stand with your feet together, bend your knees as if sitting in an invisible chair, raise your arms overhead, and keep your chest lifted while engaging your core."
     },
-    "straight leg raises (L/R)": {
+    "straight leg raises": {
         image: "straight_leg_stretch.png",
         instructions: "Lie flat on your back with one leg bent and the other leg straight, then lift the straight leg towards the ceiling, keeping it straight, and lower it back down without touching the floor."
     },
-    "standing quad stretch (L/R)": {
+    "standing quad stretch": {
         image: "standing_quad_stretch.png",
         instructions: "Stand tall, bend one knee to bring your heel towards your glutes, grab your ankle with your hand, and gently pull it while keeping your knees together and your hips pushed forward."
     },

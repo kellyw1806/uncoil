@@ -29,12 +29,12 @@ LEG = "Leg"
 model = YOLO("models/yolo11m-pose.pt")
 
 history = []
-word_dict = {"Please fix your posture!" : int(time.time()),
-             "Your posture is correct!" : int(time.time())}
+word_dict = {"Please fix your posture!" : int(time.time()) + 5,
+             "Your posture is correct!" : int(time.time()) + 5}
 
 # Dictionary to store correct pose angles for each exercise
 exercise_angles = {
-    "bird dog left": [
+    "bird dog": [
         [BACK, [[[LEFT_SHOULDER, LEFT_HIP, LEFT_ANKLE], 170, 190]]]
     ],
     "bird dog right": [
@@ -65,7 +65,7 @@ exercise_angles = {
             ]
         ]
     ],
-    "calf stretch left": [
+    "calf stretch": [
         [BACK, [[[LEFT_SHOULDER, LEFT_HIP, LEFT_KNEE], 75, 115]]],
         [LEFT_LEG, [[[LEFT_HIP, LEFT_KNEE, LEFT_ANKLE], 100, 120]]],
         [RIGHT_LEG, [[[RIGHT_HIP, RIGHT_KNEE, RIGHT_ANKLE], 170, 190]]]
@@ -100,7 +100,7 @@ exercise_angles = {
             ]
         ],
     ],
-    "half kneeling hip flexor stretch left": [
+    "half kneeling hip flexor stretch": [
         [BACK, [[[LEFT_SHOULDER, LEFT_HIP, LEFT_KNEE], 80, 100]]],
         [LEFT_LEG, [[[LEFT_HIP, LEFT_KNEE, LEFT_ANKLE], 80, 100]]],
         [RIGHT_LEG, [[[RIGHT_HIP, RIGHT_KNEE, RIGHT_ANKLE], 80, 100]]]
@@ -153,7 +153,7 @@ exercise_angles = {
             ]
         ]
     ],
-    "side plank left": [
+    "side plank": [
         [BACK, [[[LEFT_SHOULDER, LEFT_HIP, LEFT_ANKLE], 170, 190]]]
     ],
     "side plank tight": [
@@ -168,7 +168,7 @@ exercise_angles = {
             ]
         ]
     ],
-    "standing quad stretch left": [
+    "standing quad stretch": [
         [LEFT_LEG, [[[LEFT_HIP, LEFT_KNEE, LEFT_ANKLE], 0, 45]]],
         [RIGHT_LEG, [[[RIGHT_HIP, RIGHT_KNEE, RIGHT_ANKLE], 170, 190]]],
         [
@@ -190,7 +190,7 @@ exercise_angles = {
             ]
         ]
     ],
-    "straight leg left": [
+    "straight leg": [
         [LEFT_LEG, [[[LEFT_SHOULDER, LEFT_HIP, LEFT_ANKLE], 105, 150]]]
     ],
     "straight leg right": [
@@ -222,7 +222,7 @@ def check_pose(landmarks, exercise_name):
     for angle_set in correct_angles:
         correct = 0
         body_part = angle_set[0]
-        orientation = None
+        orientation = ''
         for angles in angle_set[1]:
             angle1, angle2, angle3 = angles[0]
             smallest_angle, largest_angle = angles[1], angles[2]
@@ -271,11 +271,9 @@ def getCorrectness(image, exercise_name):
             hist_sum = 0
             for i in history: hist_sum += i
             cur_time = int(time.time())
-            if hist_sum <= 2 and cur_time - word_dict["Please fix your posture!"] > 15:
+            if hist_sum <= 2 and cur_time - word_dict["Please fix your posture!"] > 3:
                 feedback = orientation + " your " + wrong_body + "!"
-            if hist_sum <= 2 and cur_time - word_dict["Please fix your posture!"] > 5:
-                feedback = "Please fix your " + wrong_body + " posture!"
-                word_dict["Please fix your posture!"] = cur_time 
+                word_dict["Please fix your posture!"] = cur_time
             elif hist_sum >= 8 and cur_time - word_dict["Your posture is correct!"] > 5:
                 feedback = "Your posture is correct!"
                 word_dict["Your posture is correct!"] = cur_time

@@ -14,7 +14,7 @@ export default function Feed() {
   const plan = useStore($plan);
   
   const exerciseName = plan.exercise_program[curr].exercise;
-  const info = $pose_info.get()[exerciseName.toLowerCase()]
+  const info = $pose_info.get()[exerciseName.toLowerCase().replace(" (l/r)", "").replace(" (right leg)", "").replace(" (left leg)", "")]
   // console.log(exerciseName.toLowerCase())
   // convert to first letter capital
 
