@@ -18,13 +18,13 @@ LEFT_WRIST = 9
 RIGHT_WRIST = 10
 
 # Constants for body parts
-LEFT_LEG = "LEFT_LEG"
-RIGHT_LEG = "RIGHT_LEG"
-BACK = "BODY"
-LEFT_ARM = "LEFT_ARM"
-RIGHT_ARM = "RIGHT_ARM"
-ARM = "ARM"
-LEG = "LEG"
+LEFT_LEG = "Left Leg"
+RIGHT_LEG = "Right Leg"
+BACK = "Body"
+LEFT_ARM = "Left Arm"
+RIGHT_ARM = "Right Arm"
+ARM = "Arm"
+LEG = "Leg"
 
 model = YOLO("models/yolo11m-pose.pt")
 
@@ -46,6 +46,13 @@ exercise_angles = {
             [
                 [[RIGHT_SHOULDER, RIGHT_HIP, RIGHT_KNEE], 170, 190],
                 [[LEFT_SHOULDER, LEFT_HIP, LEFT_KNEE], 170, 190]
+            ]
+        ],
+        [
+            LEG,
+            [
+                [[RIGHT_HIP, RIGHT_KNEE, RIGHT_ANKLE], 75, 105],
+                [[LEFT_HIP, LEFT_KNEE, LEFT_ANKLE], 75, 105]
             ]
         ]
     ],
@@ -215,6 +222,7 @@ def check_pose(landmarks, exercise_name):
     for angle_set in correct_angles:
         correct = 0
         body_part = angle_set[0]
+        orientation = None
         for angles in angle_set[1]:
             angle1, angle2, angle3 = angles[0]
             smallest_angle, largest_angle = angles[1], angles[2]
@@ -224,7 +232,11 @@ def check_pose(landmarks, exercise_name):
             if smallest_angle <= calculated_angle <= largest_angle:
                 correct = 1
                 break
-        correctness_dict[body_part] = correct
+            elif calculated_angle < smallest_angle:
+                orientation = "straighten"
+            else:
+                orientation = "bend"
+        correctness_dict[body_part] = [correct, orientation]
     return correctness_dict
 
 
@@ -245,10 +257,12 @@ def getCorrectness(image, exercise_name):
         feedback = None
         is_correct = 1
         wrong_body = ''
+        orientation = ''
         for body_part, correct in correctness.items():
-            if correct == 0:
+            if correct[0] == 0:
                 is_correct = 0
                 wrong_body = body_part
+                orientation = correct[1]
                 break;
         
         history.append(is_correct)
@@ -257,6 +271,8 @@ def getCorrectness(image, exercise_name):
             hist_sum = 0
             for i in history: hist_sum += i
             cur_time = int(time.time())
+            if hist_sum <= 2 and cur_time - word_dict["Please fix your posture!"] > 15:
+                feedback = orientation + " your " + wrong_body + "!"
             if hist_sum <= 2 and cur_time - word_dict["Please fix your posture!"] > 5:
                 feedback = "Please fix your " + wrong_body + " posture!"
                 word_dict["Please fix your posture!"] = cur_time 
