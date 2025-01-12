@@ -44,7 +44,7 @@ export default function Form() {
     },
   ];
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurInput(e.target.value);
     const { name, value } = e.target;
     setFormData((prevData) => ({
