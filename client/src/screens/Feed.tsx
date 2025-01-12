@@ -46,7 +46,7 @@ export default function Feed() {
   useEffect(() => {
     const countdown = setInterval(() => {
       if (timer <= 0) {
-        setTimer(10);
+        setTimer(15);
         if (curr === plan.exercise_program.length - 1) {
           setCurr(0);
         } else {
@@ -151,9 +151,11 @@ export default function Feed() {
         <div className="h-32 aspect-square bg-darkoak rounded-full flex items-center justify-center text-beige font-lusitana text-4xl">
           {timer}
         </div>
-        <h1>{plan.exercise_program[curr].exercise}</h1>
-        <p className="max-w-64">{info.instructions}</p>
-        <img src={`./poses/${info.image}`} className="w-64" />
+        <div className="flex flex-col w-64 mt-8 gap-y-2">
+          <h1 className="font-lusitana-bold text-xl">{plan.exercise_program[curr].exercise}</h1>
+          <p className="max-w-64">{info.instructions}</p>
+          <img src={`./poses/${info.image}`} className="w-64 border-2 border-black rounded-2xl mt-2" />
+        </div>
       </div>
     </div>
   )

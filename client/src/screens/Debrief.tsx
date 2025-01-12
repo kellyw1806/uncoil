@@ -5,12 +5,17 @@ export default function Debrief() {
     const plan = useStore($plan)
     console.log(plan)
     return (
-        <div>
-            <h1>The Plan</h1>
+        <div className="w-full h-dvh flex flex-col items-center justify-center">
+            <h1 className="font-lusitana-bold text-5xl mb-4">The Plan</h1>
             {plan.exercise_program.map((ex, i) => (
-                <p key={i}>{ex.exercise} (15s)</p>
+                <p key={i} className="text-xl">{ex.exercise} (15s)</p>
             ))}
-            <button onClick={() => $screen.set("feed")}>Start</button>
+            <button 
+                onClick={() => $screen.set("feed")} 
+                className="mt-4 bg-pinenut70 font-lusitana text-xl py-2 px-8 rounded-lg hover:bg-pinenut transition-colors text-white"
+            >
+                Start
+            </button>
         </div>
     )
 }
