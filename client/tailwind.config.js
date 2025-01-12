@@ -13,11 +13,12 @@ export default {
         "inknut": ["InknutAntiqua"],
       },
       colors: {
-        "darkoak": "#44443C",
+        "snow": "#d9d9d9",
         "beige": "#DADAC2",
         "sawdust": "#dfbc9c",
         "pinenut": "#86938e",
         "pinenut70": "#86938eb4",
+        "darkoak": "#44443C",
       }
     },
   },

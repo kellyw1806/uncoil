@@ -1,4 +1,5 @@
 import Coil from "../components/Coil";
+import { $screen } from "../stores/global";
 
 export default function Landing() {
   return (
@@ -23,7 +24,10 @@ export default function Landing() {
             <p className="z-20">relief.</p>
           </div>
           <div className="flex justify-center">
-            <button className="bg-pinenut70 w-auto px-12 py-4 rounded-2xl text-xl font-lusitana text-beige hover:bg-pinenut transition-colors">
+            <button
+              className="bg-pinenut70 w-auto px-12 py-4 rounded-2xl text-xl font-lusitana text-beige hover:bg-pinenut transition-colors"
+              onClick={() => $screen.set("form")}
+            >
               Begin your journey!
             </button>
           </div>

@@ -1,14 +1,17 @@
 import { useStore } from "@nanostores/react"
 import { $screen } from "./stores/global"
-import Landing from "./screens/Landing";
+import Feed from "./screens/Feed";
 import Form from "./screens/Form";
+import Landing from "./screens/Landing";
 
 function App() {
   const screen = useStore($screen);
 
   return (
     <div className="h-dvh w-full bg-beige flex">
-      {screen === "landing" && <Form />}
+      {screen === "landing" && <Landing />}
+      {screen === "form" && <Form />}
+      {screen === "feed" && <Feed />}
     </div>
   )
 }
