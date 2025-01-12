@@ -29,8 +29,8 @@ LEG = "Leg"
 model = YOLO("models/yolo11m-pose.pt")
 
 history = []
-word_dict = {"Please fix your posture!" : int(time.time()) + 5,
-             "Your posture is correct!" : int(time.time()) + 5}
+word_dict = [int(time.time()) + 5, int(time.time()) + 5]
+last_wrong = []
 
 # Dictionary to store correct pose angles for each exercise
 exercise_angles = {
@@ -237,6 +237,7 @@ def check_pose(landmarks, exercise_name):
             else:
                 orientation = "bend"
         correctness_dict[body_part] = [correct, orientation]
+        last_wrong = [body_part, orientation]
     return correctness_dict
 
 
@@ -256,13 +257,9 @@ def getCorrectness(image, exercise_name):
         correctness = check_pose(pose_data, exercise_name)
         feedback = None
         is_correct = 1
-        wrong_body = ''
-        orientation = ''
         for body_part, correct in correctness.items():
             if correct[0] == 0:
                 is_correct = 0
-                wrong_body = body_part
-                orientation = correct[1]
                 break;
         
         history.append(is_correct)
@@ -271,12 +268,12 @@ def getCorrectness(image, exercise_name):
             hist_sum = 0
             for i in history: hist_sum += i
             cur_time = int(time.time())
-            if hist_sum <= 2 and cur_time - word_dict["Please fix your posture!"] > 3:
-                feedback = orientation + " your " + wrong_body + "!"
-                word_dict["Please fix your posture!"] = cur_time
-            elif hist_sum >= 8 and cur_time - word_dict["Your posture is correct!"] > 5:
+            if hist_sum <= 2 and cur_time - word_dict[0] > 3:
+                feedback = last_wrong[1] + " your " + last_wrong[0] + "!"
+                word_dict[0] = cur_time
+            elif hist_sum >= 8 and cur_time - word_dict[1] > 7:
                 feedback = "Your posture is correct!"
-                word_dict["Your posture is correct!"] = cur_time
+                word_dict[1] = cur_time
             
         # print("Correctness:", correctness)
 
