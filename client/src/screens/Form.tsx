@@ -1,40 +1,127 @@
+import { useState } from "react";
+
 export default function Form() {
-    return (
-      <div className="h-dvh w-full bg-beige flex">
-        <div className="h-full w-[600px] ml-40 relative">
-          <img src="./landing.png" className="h-full object-cover" />
-          <div className="absolute left-8 top-8 text-4xl">
-            <h2 className="font-lusitana">stretch.</h2>
-            <h2 className="font-lusitana">correct.</h2>
-            <h2 className="font-lusitana">relief.</h2>
-          </div>
+  const [step, setStep] = useState(0);
+  const [formData, setFormData] = useState({
+    age: "",
+    height: "",
+    weight: "",
+    injury: "",
+    goal: "",
+  });
+  const [curInput, setCurInput] = useState("");
+
+  const questions = [
+    {
+      label: "How old are you?",
+      name: "age",
+      type: "text",
+      placeholder: "Enter your age",
+    },
+    {
+      label: "What is your height in cm?",
+      name: "height",
+      type: "text",
+      placeholder: "Enter your height (cm)",
+    },
+    {
+      label: "What is your weight in kg?",
+      name: "weight",
+      type: "text",
+      placeholder: "Enter your weight (kg)",
+    },
+    {
+      label: "What body part would you like to focus on?",
+      name: "injury",
+      type: "text",
+      placeholder: "Enter your answer",
+    },
+    {
+      label: "What are you working to improve? e.g. strength, flexibility, rehab, etc.",
+      name: "goal",
+      type: "text",
+      placeholder: "Enter your answer",
+    },
+  ];
+
+  const handleChange = (e) => {
+    setCurInput(e.target.value);
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const nextStep = () => {
+    setCurInput("");
+    if (step < questions.length - 1) {
+      setStep(step + 1);
+    } else {
+      console.log("Form submitted:", formData);
+      alert("Thank you for your response!");
+    }
+  };
+
+  const prevStep = () => {
+    setCurInput("");
+    if (step > 0) setStep(step - 1);
+  };
+
+  return (
+    <div className="h-screen w-full bg-sawdust flex">
+      <div className="w-full bg-pinenut flex h-32 mt-16 w-full items-center">
+        <div className="flex ml-16 mt-2">
+          <h1 className="text-7xl text-left font-lusitana text-sawdust">uncoil</h1>
         </div>
-        <div className="flex-1 flex flex-col items-center justify-center gap-y-8">
-          <div>
-            <div className="flex">
-              <h1 className="text-7xl text-center font-lusitana">uncoil</h1>
-              <img src="./coil.svg" className="scale-75 mb-2" />
-            </div>
-            <h2 className="text-center text-2xl font-cedarville">
-              the future of physiotherapy
-            </h2>
-          </div>
-  
-          <div className="flex flex-col items-center gap-y-4">
-            <div className="bg-latte h-56 aspect-square rounded-full border-[12px] border-wood flex items-center justify-center">
-              <div className="text-3xl m-4 font-serif ml-[1.75rem] text-beige">
-                heal in the comfort of your home
-              </div>
-            </div>
-            <div className="bg-wood h-12 aspect-square rounded-full" />
-            <div className="bg-wood h-8 aspect-square rounded-full" />
-          </div>
-  
-          <button className="bg-ocean text-beige text-2xl font-lusitana py-2 px-4 rounded-xl shadow-lg hover:bg-[#295f7d] transition-colors">
-            begin your journey
+      </div>
+      <div className="font-inknut absolute text-darkoak text-center" style={{"top": "38%", "right": "11.5%", "fontSize": "2rem"}}>
+        help us get to know you better
+      </div>
+      <div className="w-full max-w-xl p-8 shadow-lg rounded-lg h-96 absolute bg-pinenut border-darkoak border-8" style={{"top": "45%", "right": "10%"}}>
+        {/* <div className="flex mb-4">
+          {questions.map((_, index) => (
+            <div
+              key={index}
+              className={`flex-1 h-2 mx-1 ${
+                index <= step ? "bg-blue-500" : "bg-gray-300"
+              } transition-all duration-300`}
+            ></div>
+          ))}
+        </div> */}
+
+        <div className="transition-all py-16 justify-center items-center flex flex-col">
+          <h2 className="text-3xl mb-4 font-inknut text-sawdust">
+            {questions[step].label}
+          </h2> 
+            <input
+              type={questions[step].type}
+              name={questions[step].name}
+              value={curInput}
+              onChange={handleChange}
+              placeholder={questions[step].placeholder}
+              className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          
+        </div>
+
+        <div className="flex justify-between mt-6">
+          {step > 0 && (
+            <button
+              onClick={prevStep}
+              className="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400"
+            >
+              Back
+            </button>
+          )}
+          <button
+            onClick={nextStep}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+          >
+            {step < questions.length - 1 ? "Next" : "Submit"}
           </button>
         </div>
       </div>
-    )
-  }
-  
+    </div>
+  );
+}

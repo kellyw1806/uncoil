@@ -17,6 +17,11 @@
   src: local("Roboto"), url(./fonts/Roboto.ttf) format("truetype");
 }
 
+@font-face {
+  font-family: "InknutAntiqua";
+  src: local("InknutAntiqua"), url(./fonts/InknutAntiqua-Regular.ttf) format("truetype");
+}
+
 :root {
   font-family: Roboto, serif;
   line-height: 1.5;
@@ -27,3 +32,4 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
