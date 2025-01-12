@@ -5,6 +5,9 @@ from fastapi.middleware.cors import CORSMiddleware
 import cv2
 import base64
 import numpy as np
+from pprint import pprint
+
+from functions import create_exercises, create_plan, parse_injury
 
 app = FastAPI()
 
@@ -22,8 +25,12 @@ def read_root():
 
 @app.post("/plan")
 async def plan_post(request: Request):
-    body = await request.json()
-    return {"exercises": ["Pushups", "Situps", "Squats", f"Age: {body['age']}"]}
+    details = await request.json()
+    details["injury"] = parse_injury(details["injury"])
+    exercises = create_exercises(details)
+    plan = create_plan(exercises)
+    pprint(dict(details=details, exercises=exercises, plan=plan))
+    return dict(exercises=exercises, plan=plan)
 
 def base64_to_image(base64_str):
     image_data = base64.b64decode(base64_str.split(",")[1])
