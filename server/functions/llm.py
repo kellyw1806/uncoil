@@ -1,7 +1,11 @@
 import cohere
 import json
-import re
+import os
 from collections import OrderedDict 
+from dotenv import load_dotenv
+
+load_dotenv()
+API_KEY = os.getenv("CO_API_KEY")
 
 def clean_response(raw_text):
 
@@ -63,17 +67,24 @@ def communicate_with_api(api_key, user_message):
 
     return json.dumps(result)
 
-if __name__ == "__main__":
+def llm_parse_injury(api_key, text):
+    prompt = f"Given the following text, classify whether it falls under the category of a leg, hip, shoulder, upper back, lower back, core or no injury: {text}"
+    general_response = communicate_with_api(api_key, prompt)
+    return general_response
+
+#if __name__ == "__main__":
+
     
-    API_KEY = "lZLDIFGCrIoPJkGmNaAnMS3arFZz7yqUfpTo3QGr"
 
-    exercises = ["cobra", "pigeon", "downward dog", "child's pose", "tree pose"]
-    time_slot = 15
-    program = generate_program(API_KEY, exercises, time_slot)
-    print("Generated Exercise Program (JSON):")
-    print(program)
+    # injury = llm_parse_injury(API_KEY, "sometimes i feel like my torso hurts.")
+    # print(injury)
+    # exercises = ["cobra", "pigeon", "downward dog", "child's pose", "tree pose"]
+    # time_slot = 15
+    # program = generate_program(API_KEY, exercises, time_slot)
+    # print("Generated Exercise Program (JSON):")
+    # print(program)
 
-    custom_prompt = "Provide rephrases of the following phrase and do not include any other text that is not that: Straighten your back."
-    general_response = communicate_with_api(API_KEY, custom_prompt)
-    print("\nGeneral API Response (JSON):")
-    print(general_response)
+    # custom_prompt = "Provide rephrases of the following phrase and do not include any other text that is not that: Straighten your back."
+    # general_response = communicate_with_api(API_KEY, custom_prompt)
+    # print("\nGeneral API Response (JSON):")
+    # print(general_response)

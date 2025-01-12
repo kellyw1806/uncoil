@@ -28,7 +28,7 @@ async def plan_post(request: Request):
     details = await request.json()
     details["injury"] = parse_injury(details["injury"])
     exercises = create_exercises(details)
-    plan = create_plan(exercises)
+    plan = create_plan(exercises, details["duration"])
     pprint(dict(details=details, exercises=exercises, plan=plan))
     return dict(exercises=exercises, plan=plan)
 
