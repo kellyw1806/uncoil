@@ -7,12 +7,14 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        "merriweather": ["Merriweather", "serif"],
-        "outfit": ["Outfit", "sans-serif"],
+        "lusitana": ["Lusitana", "serif"],
+        "cedarville": ["CedarvilleCursive", "cursive"],
       },
       colors: {
-        "primary": "#34d19e",
-        "secondary": "#a58bfa"
+        "beige": "#f0ddb8",
+        "latte": "#c78b49",
+        "wood": "#e6ab5c",
+        "ocean": "#1d4257",
       }
     },
   },

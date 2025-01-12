@@ -3,8 +3,13 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "Outfit";
-  src: local("Outfit"), url(./fonts/Outfit.ttf) format("truetype");
+  font-family: "CedarvilleCursive";
+  src: local("CedarvilleCursive"), url(./fonts/CedarvilleCursive-Regular.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Lusitana";
+  src: local("Lusitana"), url(./fonts/Lusitana-Bold.ttf) format("truetype");
 }
 
 @font-face {
@@ -12,19 +17,10 @@
   src: local("Roboto"), url(./fonts/Roboto.ttf) format("truetype");
 }
 
-@font-face {
-  font-family: "Merriweather";
-  src: local("Merriweather"), url(./fonts/Merriweather-Bold.ttf) format("truetype");
-}
-
 :root {
   font-family: Roboto, serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: dark;
-  color: rgba(255, 255, 255, 1);
-  background-color: #202020;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
