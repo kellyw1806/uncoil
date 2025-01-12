@@ -98,6 +98,9 @@ export default function Form() {
       <div className="font-inknut absolute text-darkoak text-center" style={{"top": "38%", "right": "11.5%", "fontSize": "2rem"}}>
         help us get to know you better
       </div>
+      <img src="./landing/form1.png" className="absolute" style={{"width": "395px", "height": "562px", "top": "237px", "left": "51px"}}/>
+      <img src="./landing/form2.png" className="absolute" style={{"width": "326px", "height": "491px", "top": "427px", "left": "394px"}}/>
+
       <div className="w-full max-w-xl p-8 shadow-lg rounded-lg h-96 absolute bg-pinenut border-darkoak border-8" style={{"top": "35%", "right": "10%"}}>
 
         <div className="transition-all py-8 px-4 justify-center items-center flex flex-col mt-auto">
@@ -108,9 +111,10 @@ export default function Form() {
               type={questions[step].type}
               name={questions[step].name}
               value={curInput}
+              required={true}
               onChange={handleChange}
               placeholder={questions[step].placeholder}
-              className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 mt-4"
             />
           
         </div>

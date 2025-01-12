@@ -68,15 +68,29 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Another Section to Scroll Down to */}
-      <div id="section1" className="h-screen bg-gray-300 flex w-full items-center justify-center">
-        <h2 className="text-4xl font-bold">Section 1</h2>
+      <div id="section1" className="h-screen bg-sawdust relative">
+        <img src="./landing/about1.png" className="absolute" style={{"top": "183px", "width": "670px", "height": "524px", "left": "3%"}} />
+        <img src="./landing/about2.png" className="absolute" style={{"top": "357px", "right": "0%", "width": "378px", "height": "563px"}} />
+        <div className="font-lusitana absolute" style={{"top": "150px", "right": "580px", "fontSize": "57px", "fontWeight": "bold"}}>
+        Every move matters. 
+        </div>
+        <div className="font-lusitana absolute bg-pinenut" style={{"top": "280px", "right": " 480px", "fontSize": "38px", "width": "600px", "opacity":"0.7"}}>
+        The line between recovery and reinjury is drawn by one key factor: proper form. 
+        </div>
+        <div className="font-lusitana absolute" style={{"top": "500px", "right": "480px", "fontSize": "28px", "width": "600px"}}>
+        Through innovative software, we reimagine the future of physical therapy, transforming every movement into a step toward recovery and strength.        </div>
+        <div className="font-lusitana absolute" style={{"top": "750px", "left": "50px", "fontSize": "40px", "width": "1300px"}}> 
+          There, at the intersection of expertise and innovation, we will meet Uncoil reshaping how we move, heal, and thrive.
+        </div>
+
       </div>
-      <div id="section2" className="h-screen bg-gray-400 flex w-full items-center justify-center">
-        <h2 className="text-4xl font-bold">Section 2</h2>
+      <div id="section2" className="h-screen relative" style={{"backgroundColor": "#86938E"}}>
+      <div className="font-inknut absolute" style={{"fontSize": "36px", "width": "400px", "left": "1250px", "top": "200px"}}>
+        our technology
+        </div>
       </div>
-      <div id="section3" className="h-screen bg-gray-500 flex w-full items-center justify-center">
-        <h2 className="text-4xl font-bold">Section 3</h2>
+      <div id="section3" className="h-screen relative" style={{"backgroundColor": "#DFBC9C"}}>
+        <h2 className="text-4xl font-bold font-inknut absolute" style={{"fontSize": "36px", "left": "700px", "top": "150px"}}>let's show you how it works</h2>
       </div>
     </div>
   );

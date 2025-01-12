@@ -1,6 +1,6 @@
 import { atom } from "nanostores";
 
-export const $screen = atom("form");
+export const $screen = atom("landing");
 
 export const $exercises = atom([]);
 export const $plan = atom({});
