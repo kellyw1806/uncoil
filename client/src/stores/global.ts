@@ -1,8 +1,9 @@
 import { atom } from "nanostores";
 
-export const $screen = atom("landing");
+export const $screen = atom("form");
 
-export const $form = atom({})
+export const $exercises = atom([]);
+export const $plan = atom({});
 
 export const $pose_info = atom({
     "Standing calf raise": {

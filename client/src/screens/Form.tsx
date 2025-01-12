@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { $exercises, $plan } from "../stores/global";
 
 export default function Form() {
   const [step, setStep] = useState(0);
@@ -8,6 +9,7 @@ export default function Form() {
     weight: "",
     injury: "",
     goal: "",
+    duration: "15s"
   });
   const [curInput, setCurInput] = useState("");
 
@@ -53,13 +55,31 @@ export default function Form() {
     }));
   };
 
-  const nextStep = () => {
+  const nextStep = async () => {
     setCurInput("");
     if (step < questions.length - 1) {
       setStep(step + 1);
     } else {
+      try {
+        console.log("Sending plan")
+        const response = await fetch('http://localhost:8000/plan', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        })
+        if (!response.ok) throw new Error('Network response was not ok')
+  
+        const result = await response.json()
+        $exercises.set(result.exercises)
+        $plan.set(JSON.parse(result.plan))
+        console.log(result)
+  
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error)
+      }
       console.log("Form submitted:", formData);
-      alert("Thank you for your response!");
     }
   };
 
