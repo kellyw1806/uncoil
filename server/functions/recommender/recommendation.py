@@ -1,12 +1,17 @@
 import tensorflow as tf
 import numpy as np
 import pandas as pd
+import os
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
 scaler = StandardScaler()
 encoder = OneHotEncoder(sparse_output=False)
-dataset = pd.read_csv("exercise_dataset.csv")
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+dataset_path = os.path.join(current_dir, "exercise_dataset.csv")
+
+dataset = pd.read_csv(dataset_path)
 
 # Fit the scalers and encoders only once
 def initialize_preprocessors():
@@ -25,7 +30,8 @@ initialize_preprocessors()
 
 def get_recommendations(features):
     # Load the model
-    model = tf.keras.models.load_model('pose_recommender.h5')
+    model_path = os.path.join(current_dir, "pose_recommender.h5")
+    model = tf.keras.models.load_model(model_path)
 
     # Preprocess the features
     numerical_features = np.array([[features["age"], features["weight"], features["height"]]])  # Ensure it's 2D

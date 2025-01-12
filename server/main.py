@@ -7,7 +7,7 @@ import base64
 import numpy as np
 from pprint import pprint
 
-from functions import create_exercises, create_plan, generate_feedback, parse_injury
+from functions import create_exercises, create_plan, generate_feedback, parse_responses
 
 app = FastAPI()
 
@@ -26,7 +26,7 @@ def read_root():
 @app.post("/plan")
 async def plan_post(request: Request):
     details = await request.json()
-    details["injury"] = parse_injury(details["injury"])
+    details = parse_responses(details)
     exercises = create_exercises(details)
     plan = create_plan(exercises, details["duration"])
     pprint(dict(details=details, exercises=exercises, plan=plan))
@@ -57,4 +57,16 @@ async def websocket_endpoint(websocket: WebSocket):
     finally:
         await websocket.close()
         cv2.destroyAllWindows()
+
+# test_responses = {
+#     "age": "i am 49, pushign 50",
+#     "height": "i think im around 180 cm",
+#     "weight": "35 kg",
+#     "injury_type": "recently i was in a car accident and broke three ribs",
+#     "goal": "im trying to recover from that car accident still",
+#     "duration": "5",
+# }
+
+
+# plan_post(test_responses)
 
